@@ -1,14 +1,15 @@
 ﻿using Point = System.Windows.Point;
 using DrawingContext = System.Windows.Media.DrawingContext;
+using MouseButton = System.Windows.Input.MouseButton;
 
 namespace PaintPassing.Tools
 {
     class RectangleTool : Tool
     {
         private Rectangle rectangle = new Rectangle();
-        public override void MouseDown(Point startPoint)
+        public override void MouseDown(Point startPoint, MouseButton mouseButton)
         {
-            base.MouseDown(startPoint);
+            base.MouseDown(startPoint, mouseButton);
 
             rectangle.StartPoint = startPoint;
             rectangle.EndPoint = startPoint;

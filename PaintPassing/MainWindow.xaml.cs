@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -12,18 +13,27 @@ namespace PaintPassing
     /// </summary>]
     public partial class MainWindow : Window
     {
-        enum ToolPicker
+        private enum ToolPicker
         {
             Line,
             Rectangle,
             Ellipse,
             Pencil,
             Text,
-            Move
+            Move,
+            Zoom
+        }
+
+        public struct ViewPort
+        {
+            public double X, Y, Scale;
         }
 
         public static List<Shape> Shapes = new List<Shape>();
-        private static VisualHost visualHost = new VisualHost();
+        public static ViewPort viewPort = new ViewPort() { X = 0, Y = 0, Scale = 1 };
+        public static Canvas Canv;
+
+        private VisualHost visualHost = new VisualHost();
 
         private Dictionary<ToolPicker, Tool> tools = new Dictionary<ToolPicker, Tool> {
             {ToolPicker.Line, new LineTool() },
@@ -32,15 +42,18 @@ namespace PaintPassing
             {ToolPicker.Ellipse, new EllipseTool() },
             {ToolPicker.Text, new TextTool() },
             {ToolPicker.Move, new MoveTool() },
+            {ToolPicker.Zoom, new ZoomTool() },
         };
 
-        ToolPicker toolPicker;
+        private ToolPicker toolPicker;
+       
 
         public MainWindow()
         {
 
             InitializeComponent();
 
+            Canv = MainCanvas;
             Canv.Children.Add(visualHost);
             visualHost.Redraw(Shapes);
 
@@ -50,7 +63,7 @@ namespace PaintPassing
         private void Canv_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var point = e.GetPosition(Canv);
-            tools[toolPicker].MouseDown(point);
+            tools[toolPicker].MouseDown(point, e.ChangedButton);
         }
 
         private void Canv_MouseMove(object sender, MouseEventArgs e)
@@ -64,29 +77,11 @@ namespace PaintPassing
             {
                 tools[toolPicker].MouseMove(dc, point);
             }
-            visualHost.Redraw(Shapes);
+
+            if (toolPicker != ToolPicker.Pencil)
+                visualHost.Redraw(Shapes);
+
             visualHost.AddChild(dv);
-
-
-
-
-            //if (!Move)
-            //{
-            //    if (toolPicker == ToolPicker.Pencil)
-            //    {
-            //        Shape.EndPoint = e.GetPosition(Canv);
-            //        using (var dc = dv.RenderOpen())
-            //        {
-            //            Shape.Draw(dc);
-            //        }
-            //        if (Shape.StartPoint != Shape.EndPoint)
-            //        {
-            //            Shapes.Add(Shape.Clone());
-            //        }
-            //        visualHost.Redraw(Shapes);
-            //        Shape.StartPoint = Shape.EndPoint;
-            //    }
-            //}
         }
 
         private void Canv_MouseUp(object sender, MouseButtonEventArgs e)
@@ -106,7 +101,9 @@ namespace PaintPassing
         private void ButtonText_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Text;
 
         private void ButtonMove_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Move;
-        
+
+        private void ButtonZoom_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Zoom;
+
         private void ButtonColor_Click(object sender, RoutedEventArgs e)
         {
             if (ColorPickerWPF.ColorPickerWindow.ShowDialog(out var color))

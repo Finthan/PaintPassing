@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Border Margin="150, 0, 0, 0" Background="Gray">
-            <Canvas x:Name="Canv" Margin="2, 2, 2, 2" Background="White" MouseMove="Canv_MouseMove" MouseDown="Canv_MouseDown" MouseUp="Canv_MouseUp"/>
+            <Canvas x:Name="MainCanvas" Margin="2, 2, 2, 2" Background="White" MouseMove="Canv_MouseMove" MouseDown="Canv_MouseDown" MouseUp="Canv_MouseUp"/>
         </Border>
         <StackPanel HorizontalAlignment="Left" Height="434" VerticalAlignment="Center" Width="150" Background="White">
             <Button x:Name="ButtonLine" Content="Линия" HorizontalAlignment="Left" Height="30" Margin = "5, 25, 0, 0" VerticalAlignment="Top" Width="135" RenderTransformOrigin="0.512,0.54" Click="ButtonLine_Click"/>
@@ -25,6 +25,7 @@
             </ComboBox>
             <Button x:Name="ButtonColor" Content="Палитра" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="135" Click="ButtonColor_Click"/>
             <Button x:Name="ButtonMove" Content="Перемещение" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="134" Click="ButtonMove_Click"/>
+            <Button x:Name="ButtonZoom" Content="Прибл/удал" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="134" Click="ButtonZoom_Click"/>
             <Button x:Name="ButtonDelete" Content="Удалить" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="134" Click="ButtonDelete_Click"/>
         </StackPanel>
     </Grid>

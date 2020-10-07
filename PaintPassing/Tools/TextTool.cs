@@ -1,14 +1,15 @@
 ﻿using Point = System.Windows.Point;
 using DrawingContext = System.Windows.Media.DrawingContext;
+using MouseButton = System.Windows.Input.MouseButton;
 
 namespace PaintPassing.Tools
 {
     class TextTool : Tool
     {
         private Text text = new Text();
-        public override void MouseDown(Point startPoint)
+        public override void MouseDown(Point startPoint, MouseButton mouseButton)
         {
-            base.MouseDown(startPoint);
+            base.MouseDown(startPoint, mouseButton);
 
             text.StartPoint = startPoint;
             text.EndPoint = startPoint;

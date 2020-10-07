@@ -1,5 +1,6 @@
 ﻿using Point = System.Windows.Point;
 using DrawingContext = System.Windows.Media.DrawingContext;
+using MouseButton = System.Windows.Input.MouseButton;
 
 namespace PaintPassing.Tools
 {
@@ -7,9 +8,10 @@ namespace PaintPassing.Tools
     {
         protected bool leftClick = false;
 
-        public virtual void MouseDown(Point startPoint)
+        public virtual void MouseDown(Point startPoint, MouseButton mouseButton)
         {
-            leftClick = true;
+            if (mouseButton == MouseButton.Left)
+                leftClick = true;
         }
 
         public virtual void MouseMove(DrawingContext dc, Point endPoint)

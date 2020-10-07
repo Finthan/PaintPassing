@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PaintPassing.Tools;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
@@ -11,182 +12,125 @@ namespace PaintPassing
     /// </summary>]
     public partial class MainWindow : Window
     {
-        int WidthLine;
-
-        bool Move = false;
-
-        public Point point = new Point();
-
-        Brush ColorMain = Brushes.Black;
-
-        enum Func
+        enum ToolPicker
         {
             Line,
             Rectangle,
             Ellipse,
             Pencil,
-            Text
+            Text,
+            Move
         }
 
-        Shape Shape;
-        List<Shape> Shapes = new List<Shape>();
-        Func func;
+        public static List<Shape> Shapes = new List<Shape>();
+        private static VisualHost visualHost = new VisualHost();
+
+        private Dictionary<ToolPicker, Tool> tools = new Dictionary<ToolPicker, Tool> {
+            {ToolPicker.Line, new LineTool() },
+            {ToolPicker.Rectangle, new RectangleTool() },
+            {ToolPicker.Pencil, new PencilTool() },
+            {ToolPicker.Ellipse, new EllipseTool() },
+            {ToolPicker.Text, new TextTool() },
+            {ToolPicker.Move, new MoveTool() },
+        };
+
+        ToolPicker toolPicker;
 
         public MainWindow()
         {
 
             InitializeComponent();
-            Canv.Children.Add(visualHost);
 
+            Canv.Children.Add(visualHost);
             visualHost.Redraw(Shapes);
 
-            func = Func.Line;
-        }
-
-        public VisualHost visualHost = new VisualHost();
-
-
-
-        private void Canv_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton != MouseButtonState.Pressed) return;
-            if (!Move)
-            {
-                if (func == Func.Pencil)
-                {
-                    Shape.EndPoint = e.GetPosition(Canv);
-                    var dv = new DrawingVisual();
-                    using (var dc = dv.RenderOpen())
-                    {
-                        Shape.Draw(dc);
-                    }
-                    if (Shape.StartPoint != Shape.EndPoint)
-                    {
-                        Shapes.Add(Shape.Clone());
-                    }
-                    visualHost.Redraw(Shapes);
-                    Shape.StartPoint = Shape.EndPoint;
-                }
-                else
-                {
-                    Shape.EndPoint = e.GetPosition(Canv);
-                    var dv = new DrawingVisual();
-                    using (var dc = dv.RenderOpen())
-                    {
-                        
-                    }
-                    visualHost.Redraw(Shapes);
-                    visualHost.AddChild(dv);
-                }
-            }
-            else
-            {
-                var End = e.GetPosition(Canv);
-                var delta = new Point
-                {
-                    X = End.X - point.X,
-                    Y = End.Y - point.Y
-                };
-
-                foreach (var shape in Shapes)
-                {
-                    shape.StartPoint = new Point
-                    {
-                        X = shape.StartPoint.X + delta.X,
-                        Y = shape.StartPoint.Y + delta.Y
-                    };
-                    shape.EndPoint = new Point
-                    {
-                        X = shape.EndPoint.X + delta.X,
-                        Y = shape.EndPoint.Y + delta.Y
-                    };
-                }
-                point = End;
-                visualHost.Redraw(Shapes);
-            }
+            toolPicker = ToolPicker.Line;
         }
 
         private void Canv_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            WidthLine = Convert.ToInt32(TextInput.Text);
+            var point = e.GetPosition(Canv);
+            tools[toolPicker].MouseDown(point);
+        }
+
+        private void Canv_MouseMove(object sender, MouseEventArgs e)
+        {
             if (e.LeftButton != MouseButtonState.Pressed) return;
 
-            point = e.GetPosition(Canv);
+            var point = e.GetPosition(Canv);
 
-            if (!Move)
+            var dv = new DrawingVisual();
+            using (var dc = dv.RenderOpen())
             {
-                Shape = func switch
-                {
-                    Func.Line => new Line() { Outline = new Pen(ColorMain, WidthLine) },
-                    Func.Rectangle => new Rectangle() { Outline = new Pen(ColorMain, WidthLine) },
-                    Func.Ellipse => new Ellipse() { Outline = new Pen(ColorMain, WidthLine) },
-                    Func.Pencil => new Line() { Outline = new Pen(ColorMain, WidthLine) },
-                    Func.Text => new Text() { Outline = new Pen(ColorMain, WidthLine) },
-                    _ => throw new Exception()
-                };
-                Shape.StartPoint = e.GetPosition(Canv);
+                tools[toolPicker].MouseMove(dc, point);
             }
-            /*
-            else if ()
-            {
+            visualHost.Redraw(Shapes);
+            visualHost.AddChild(dv);
 
-            }
-            */
+
+
+
+            //if (!Move)
+            //{
+            //    if (toolPicker == ToolPicker.Pencil)
+            //    {
+            //        Shape.EndPoint = e.GetPosition(Canv);
+            //        using (var dc = dv.RenderOpen())
+            //        {
+            //            Shape.Draw(dc);
+            //        }
+            //        if (Shape.StartPoint != Shape.EndPoint)
+            //        {
+            //            Shapes.Add(Shape.Clone());
+            //        }
+            //        visualHost.Redraw(Shapes);
+            //        Shape.StartPoint = Shape.EndPoint;
+            //    }
+            //}
         }
 
         private void Canv_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (!Move)
-            {
-                Shapes.Add(Shape.Clone());
-                visualHost.Redraw(Shapes);
-            }
+            tools[toolPicker].MouseUp();
+            visualHost.Redraw(Shapes);
         }
 
-        private void ButtonLine_Click(object sender, RoutedEventArgs e)
-        {
-            func = Func.Line;
-            Move = false;
-        }
+        private void ButtonLine_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Line;
 
-        private void ButtonEllipse_Click(object sender, RoutedEventArgs e)
-        {
-            func = Func.Ellipse;
-            Move = false;
-        }
+        private void ButtonEllipse_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Ellipse;
 
-        private void ButtonRectangle_Click(object sender, RoutedEventArgs e)
-        {
-            func = Func.Rectangle;
-            Move = false;
-        }
-        private void ButtonPencil_Click(object sender, RoutedEventArgs e)
-        {
-            func = Func.Pencil;
-            Move = false;
-        }
-        private void ButtonText_Click(object sender, RoutedEventArgs e)
-        {
-            func = Func.Text;
-            Move = false;
-        }
+        private void ButtonRectangle_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Rectangle;
+
+        private void ButtonPencil_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Pencil;
+
+        private void ButtonText_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Text;
+
+        private void ButtonMove_Click(object sender, RoutedEventArgs e) => toolPicker = ToolPicker.Move;
+        
         private void ButtonColor_Click(object sender, RoutedEventArgs e)
         {
             if (ColorPickerWPF.ColorPickerWindow.ShowDialog(out var color))
             {
-                ColorMain = new SolidColorBrush(color);
+                Configurator.Outline = color;
             }
         }
 
-        private void ButtonMove_Click(object sender, RoutedEventArgs e)
-        {
-            Move = true;
-        }
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
             Shapes.Clear();
             visualHost.Redraw(Shapes);
-            Move = true;
+        }
+
+        private void TextInput_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            Configurator.Thickness = ThicknessChanger.SelectedIndex switch
+            {
+                0 => 0.5,
+                1 => 1,
+                2 => 2,
+                3 => 4,
+                _ => throw new ArgumentException(nameof(ThicknessChanger))
+            };
         }
     }
 }

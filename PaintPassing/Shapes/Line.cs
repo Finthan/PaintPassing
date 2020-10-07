@@ -6,17 +6,14 @@ namespace PaintPassing
     {
         public override void Draw(DrawingContext drawingContext)
         {
-            double Radius;
+            var radius = Thickness / 4;
+            var pen = new Pen(new SolidColorBrush(Outline), Thickness);
+            var OutlineEllipse = new Pen(pen.Brush, Thickness / 2);
 
-            Radius = this.Outline.Thickness/4;
+            drawingContext.DrawEllipse(pen.Brush, OutlineEllipse, StartPoint, radius, radius);
+            drawingContext.DrawEllipse(pen.Brush, OutlineEllipse, EndPoint, radius, radius);
 
-            Pen OutlineEllipse = new Pen(Outline.Brush, this.Outline.Thickness / 2);
-
-            drawingContext.DrawEllipse(Outline.Brush, OutlineEllipse, StartPoint, Radius, Radius);
-
-            drawingContext.DrawEllipse(Outline.Brush, OutlineEllipse, EndPoint, Radius, Radius);
-
-            drawingContext.DrawLine(Outline, StartPoint, EndPoint);
+            drawingContext.DrawLine(pen, StartPoint, EndPoint);
         }
     }
 }

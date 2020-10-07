@@ -7,7 +7,8 @@ namespace PaintPassing
     {
         public override void Draw(DrawingContext drawingContext)
         {
-            drawingContext.DrawRectangle(null, Outline, new Rect(StartPoint, EndPoint));
+            var pen = new Pen(new SolidColorBrush(Outline), Thickness);
+            drawingContext.DrawRectangle(null, pen, new Rect(StartPoint, EndPoint));
         }
     }
 }

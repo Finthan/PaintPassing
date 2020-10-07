@@ -8,6 +8,7 @@ namespace PaintPassing
     {
         public override void Draw(DrawingContext drawingContext)
         {
+            var pen = new Pen(new SolidColorBrush(Outline), Thickness);
             double CenterX;
             double CenterY;
             int x1, y1, x2, y2;
@@ -19,32 +20,12 @@ namespace PaintPassing
             CenterX = (x1 + x2) / 2;
             CenterY = (y1 + y2) / 2;
 
-            double RadiusX;
-            double RadiusY;
-
-            if (x1 > x2)
-            {
-                RadiusX = (x1 - x2) / 2;
-            }
-
-            else
-            {
-                RadiusX = (x2 - x1) / 2;
-            }
-
-            if (y1 > y2)
-            {
-                RadiusY = (y1 - y2) / 2;
-            }
-
-            else
-            {
-                RadiusY = (y2 - y1) / 2;
-            }
+            double RadiusX = Math.Abs(x1 - x2) / 2;
+            double RadiusY = Math.Abs(y1 - y2) / 2;
 
             Point CenterPoint = new Point(CenterX, CenterY);
 
-            drawingContext.DrawEllipse(null, Outline, CenterPoint, RadiusX, RadiusY);
+            drawingContext.DrawEllipse(null, pen, CenterPoint, RadiusX, RadiusY);
         }
 
         private void Point(double CenterX, double CenterY)

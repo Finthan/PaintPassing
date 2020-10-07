@@ -17,7 +17,12 @@
             <Button x:Name="ButtonPencil" Content="Карандаш" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" VerticalAlignment="Top" Width="135" RenderTransformOrigin="0.512,0.54" Click="ButtonPencil_Click"/>
             <Button x:Name="ButtonText" Content="Текст" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="134" Click="ButtonText_Click"/>
             <TextBox Height="30" Text="Толщина" HorizontalAlignment="Left" Margin = "5, 5, 0, 0" TextWrapping="Wrap" Width="135" Background="Gray"/>
-            <TextBox x:Name="TextInput" HorizontalAlignment="Left" Text="1" TextWrapping="Wrap" Margin = "5, 5, 0, 0" Width="135" Height="30"/>
+            <ComboBox x:Name="ThicknessChanger" HorizontalAlignment="Left" Margin = "5, 5, 0, 0" Width="135" Height="30" SelectedIndex="1" SelectionChanged="TextInput_SelectionChanged">
+                <ComboBoxItem Content="0.5"/>
+                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="4"/>
+            </ComboBox>
             <Button x:Name="ButtonColor" Content="Палитра" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="135" Click="ButtonColor_Click"/>
             <Button x:Name="ButtonMove" Content="Перемещение" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="134" Click="ButtonMove_Click"/>
             <Button x:Name="ButtonDelete" Content="Удалить" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="134" Click="ButtonDelete_Click"/>

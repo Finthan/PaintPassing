@@ -3,7 +3,7 @@ using DrawingContext = System.Windows.Media.DrawingContext;
 
 namespace PaintPassing.Tools
 {
-    class LineTool : Tool
+    class PencilTool : Tool
     {
         private Line line = new Line();
         public override void MouseDown(Point startPoint)
@@ -26,8 +26,6 @@ namespace PaintPassing.Tools
         public override void MouseUp()
         {
             base.MouseUp();
-
-            MainWindow.Shapes.Add(line.Clone());
         }
     }
 }

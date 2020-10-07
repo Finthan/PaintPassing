@@ -3,31 +3,31 @@ using DrawingContext = System.Windows.Media.DrawingContext;
 
 namespace PaintPassing.Tools
 {
-    class LineTool : Tool
+    class TextTool : Tool
     {
-        private Line line = new Line();
+        private Text text = new Text();
         public override void MouseDown(Point startPoint)
         {
             base.MouseDown(startPoint);
 
-            line.StartPoint = startPoint;
-            line.EndPoint = startPoint;
+            text.StartPoint = startPoint;
+            text.EndPoint = startPoint;
 
-            line.Thickness = Configurator.Thickness;
-            line.Outline = Configurator.Outline;
+            text.Thickness = Configurator.Thickness;
+            text.Outline = Configurator.Outline;
         }
 
         public override void MouseMove(DrawingContext dc, Point endPoint)
         {
-            line.EndPoint = endPoint;
-            line.Draw(dc);
+            text.EndPoint = endPoint;
+            text.Draw(dc);
         }
 
         public override void MouseUp()
         {
             base.MouseUp();
 
-            MainWindow.Shapes.Add(line.Clone());
+            MainWindow.Shapes.Add(text.Clone());
         }
     }
 }

@@ -9,46 +9,19 @@ namespace PaintPassing
         {
             StartPoint = new Point(-1, -1);
             EndPoint = new Point(-1, -1);
-            Outline = new Pen(Brushes.Black, 1);
+            Thickness = 1;
+            Outline = Colors.Black;
         }
 
         public virtual Shape Clone() => (Shape)MemberwiseClone();
 
-        public Point StartPoint
-        {
-            get;
-            set;
-        }
+        public Point StartPoint { get; set; }
 
-        public Point EndPoint
-        {
-            get;
-            set;
-        }
+        public Point EndPoint { get; set; }
 
-        public Point StartPointMove
-        {
-            get;
-            set;
-        }
+        public double Thickness { get; set; }
 
-        public Point EndPointMove
-        {
-            get;
-            set;
-        }
-
-        public Pen Outline
-        {
-            get;
-            set;
-        }
-
-        public Point CoordinatesPoint
-        {
-            get;
-            set;
-        }
+        public Color Outline { get; set; }
 
         public abstract void Draw(DrawingContext drawingContext);
     }

@@ -3,31 +3,31 @@ using DrawingContext = System.Windows.Media.DrawingContext;
 
 namespace PaintPassing.Tools
 {
-    class LineTool : Tool
+    class EllipseTool : Tool
     {
-        private Line line = new Line();
+        private Ellipse ellipse = new Ellipse();
         public override void MouseDown(Point startPoint)
         {
             base.MouseDown(startPoint);
 
-            line.StartPoint = startPoint;
-            line.EndPoint = startPoint;
+            ellipse.StartPoint = startPoint;
+            ellipse.EndPoint = startPoint;
 
-            line.Thickness = Configurator.Thickness;
-            line.Outline = Configurator.Outline;
+            ellipse.Thickness = Configurator.Thickness;
+            ellipse.Outline = Configurator.Outline;
         }
 
         public override void MouseMove(DrawingContext dc, Point endPoint)
         {
-            line.EndPoint = endPoint;
-            line.Draw(dc);
+            ellipse.EndPoint = endPoint;
+            ellipse.Draw(dc);
         }
 
         public override void MouseUp()
         {
             base.MouseUp();
 
-            MainWindow.Shapes.Add(line.Clone());
+            MainWindow.Shapes.Add(ellipse.Clone());
         }
     }
 }

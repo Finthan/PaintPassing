@@ -22,6 +22,8 @@
                 <ComboBoxItem Content="1"/>
                 <ComboBoxItem Content="2"/>
                 <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="8"/>
+                <ComboBoxItem Content="16"/>
             </ComboBox>
             <Button x:Name="ButtonColor" Content="Палитра" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="135" Click="ButtonColor_Click"/>
             <Button x:Name="ButtonMove" Content="Перемещение" HorizontalAlignment="Left" Height="30" Margin = "5, 5, 0, 0" Width="134" Click="ButtonMove_Click"/>

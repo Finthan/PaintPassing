@@ -4,7 +4,7 @@ using Point = System.Windows.Point;
 
 namespace PaintPassing
 {
-    class Ellipse : Shape
+    public class Ellipse : Shape
     {
         public override void Draw(DrawingContext drawingContext)
         {

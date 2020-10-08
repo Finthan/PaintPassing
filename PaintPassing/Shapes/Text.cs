@@ -6,7 +6,7 @@ using Point = System.Windows.Point;
 
 namespace PaintPassing
 {
-    class Text : Shape
+    public class Text : Shape
     {
         [Obsolete]
         public override void Draw(DrawingContext drawingContext)

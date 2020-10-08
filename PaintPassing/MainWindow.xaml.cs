@@ -1,10 +1,12 @@
 ﻿using PaintPassing.Tools;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace PaintPassing
 {
@@ -130,6 +132,25 @@ namespace PaintPassing
                 5 => 16,
                 _ => throw new ArgumentException(nameof(ThicknessChanger))
             };
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<Shape>));
+            using (var writer = new StreamWriter("save.xaml"))
+            {
+                xmlSerializer.Serialize(writer, Shapes);
+            }
+        }
+
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<Shape>));
+            using (var reader = new StreamReader("save.xaml"))
+            {
+                Shapes = (List<Shape>)xmlSerializer.Deserialize(reader);
+            }
+            visualHost.Redraw(Shapes);
         }
     }
 }

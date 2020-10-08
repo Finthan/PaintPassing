@@ -1,10 +1,18 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace PaintPassing
 {
+    [XmlInclude(typeof(Line))]
+    [XmlInclude(typeof(Rectangle))]
+    [XmlInclude(typeof(Ellipse))]
+    [XmlInclude(typeof(Text))]
+    [Serializable]
     public abstract class Shape
     {
+
         protected Shape()
         {
             StartPoint = new Point(-1, -1);

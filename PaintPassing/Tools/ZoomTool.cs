@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using DrawingContext = System.Windows.Media.DrawingContext;
 
 namespace PaintPassing.Tools
 {
     class ZoomTool : Tool
     {
+        private Rectangle rectangle = new Rectangle();
         private MouseButton mouseButton;
         private Point startPoint;
 
@@ -13,6 +15,24 @@ namespace PaintPassing.Tools
         {
             this.startPoint = startPoint;
             this.mouseButton = mouseButton;
+        }
+
+        Point Cursor = new Point(Mouse.GetPosition(null).X, Mouse.GetPosition(null).Y);
+
+        public override void MouseMove(DrawingContext dc, Point endPoint)
+        {
+            int x = (int)Cursor.X;
+            int y = (int)Cursor.Y;
+            Point StartPoint = new Point(x - 100, y - 50);
+            Point EndPoint = new Point(x + 100, y + 50);
+
+            rectangle.StartPoint = StartPoint;
+            rectangle.EndPoint = EndPoint;
+
+            rectangle.Thickness = Configurator.Thickness;
+            rectangle.Outline = Configurator.Outline;
+
+            rectangle.Draw(dc);
         }
 
         public override void MouseUp()

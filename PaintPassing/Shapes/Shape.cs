@@ -12,7 +12,6 @@ namespace PaintPassing
     [Serializable]
     public abstract class Shape
     {
-
         protected Shape()
         {
             StartPoint = new Point(-1, -1);
@@ -20,6 +19,7 @@ namespace PaintPassing
             Thickness = 1;
             Outline = Colors.Black;
         }
+
 
         public virtual Shape Clone() => (Shape)MemberwiseClone();
 
